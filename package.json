@@ -1,0 +1,33 @@
+{
+  "name": "intro-nodejs",
+  "version": "1.0.0",
+  "description": "intro a noud yei es",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorginho222/intro-nodejs.git"
+  },
+  "keywords": [
+    "nodejs",
+    "allalaestan",
+    "ornitorrinco"
+  ],
+  "author": "molero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jorginho222/intro-nodejs/issues"
+  },
+  "homepage": "https://github.com/jorginho222/intro-nodejs#readme",
+  "dependencies": {
+    "picocolors": "^1.0.0"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  }
+}
