@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/jorginho222/intro-nodejs#readme",
   "dependencies": {
+    "cors": "2.8.5",
     "picocolors": "^1.0.0"
   },
   "devDependencies": {

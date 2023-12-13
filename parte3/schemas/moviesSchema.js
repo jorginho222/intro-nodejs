@@ -30,10 +30,14 @@ const moviesSchema = z.object({
   )
 })
 
-function validateMovie (object) {
-  return moviesSchema.safeParse(object)
+function validateMovie (input) {
+  return moviesSchema.safeParse(input) // safe parse me tira los errores en caso q falle la validacion
+}
+
+function validatePartialMovie (input) {
+  return moviesSchema.partial().safeParse(input)
 }
 
 module.exports = {
-  validateMovie
+  validateMovie, validatePartialMovie
 }
