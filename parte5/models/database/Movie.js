@@ -1,11 +1,6 @@
 import mysql from 'mysql2/promise.js'
-const dbConfig = {
-  host: 'localhost',
-  user: 'ivanur',
-  port: 3306,
-  password: '',
-  database: 'cinema'
-}
+import { dbConfig } from './config.js'
+
 const connection = mysql.createConnection(dbConfig)
 
 export class Movie {
@@ -39,6 +34,7 @@ export class Movie {
   }
 
   static async create ({ validated }) {
+    console.log(validated)
     const {
       title,
       year,

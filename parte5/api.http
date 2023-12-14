@@ -2,7 +2,7 @@
 GET http://localhost:1234/movies
 
 ### Recuperar pelicula por id
-GET http://localhost:1234/movies/48a3cec4-9a6f-11ee-8fd0-d85ed3a4f313
+GET http://localhost:1234/movies/5c93b285-9a0b-11ee-a318-2cf05d78338f
 
 ### Recuperar peliculas por un genero
 GET http://localhost:1234/movies?genre=romance
@@ -23,10 +23,10 @@ Content-Type: application/json
 }
 
 ### Borrar una peli
-DELETE http://localhost:1234/movies/828737b0-5bfd-4881-9152-6ec8a2e96f3f
+DELETE http://localhost:1234/movies/5c93b285-9a0b-11ee-a318-2cf05d78338f
 
 ### Actualizar la pelicula (una parte)
-PATCH http://localhost:1234/movies/48a3cec4-9a6f-11ee-8fd0-d85ed3a4f313
+PATCH http://localhost:1234/movies/5c93b285-9a0b-11ee-a318-2cf05d78338f
 Content-Type: application/json
 
 {
