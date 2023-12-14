@@ -1,4 +1,5 @@
-import { Movie } from '../models/local-file-system/Movie.js'
+import { Movie } from '../models/database/Movie.js'
+// import { Movie } from '../models/local-file-system/Movie.js'
 import { validateMovie, validatePartialMovie } from '../schemas/moviesSchema.js'
 
 export class MovieController {
@@ -21,7 +22,7 @@ export class MovieController {
       // tambien podria mandarse err 422
       return res.status(400).json({ error: JSON.parse(validatedMovie.error.message) })
     }
-    const createdMovie = await Movie.create({ input: validatedMovie.data })
+    const createdMovie = await Movie.create({ validated: validatedMovie.data })
 
     res.status(201).json(createdMovie)
   }

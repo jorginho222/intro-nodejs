@@ -1,0 +1,8 @@
+node_modules
+dist
+logs
+.idea
+.tmp
+.env.local
+.env.test
+uploads/*
