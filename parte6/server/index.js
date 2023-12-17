@@ -1,10 +1,11 @@
 import express from 'express'
 import logger from 'morgan'
+import dotenv from 'dotenv'
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
-import dotenv from 'dotenv'
 import { createClient } from '@libsql/client'
 
+dotenv.config()
 const port = process.env.PORT ?? 3000
 const app = express()
 const server = createServer(app)
@@ -18,21 +19,50 @@ const db = createClient({
 
 await db.execute(`
   CREATE TABLE IF NOT EXISTS messages (
-      id INTEGER(PRIMARY KEY AUTOINCREMENT)
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      content TEXT,
+      user TEXT
   )
 `)
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log('A user has connected!')
 
   socket.on('disconnect', () => {
     console.log('An user has disconnected')
   })
 
-  socket.on('user message sent', (msg) => {
+  socket.on('user message sent', async (msg) => {
+    let result
+    const username = socket.handshake.auth.username ?? 'anonymous'
+    try {
+      result = await db.execute({
+        sql: 'INSERT INTO messages (content, user) VALUES (:msg, :username)',
+        args: { msg, username }
+      })
+    } catch (e) {
+      console.error(e)
+      return
+    }
+
     // mandamos a todos los clientes el msg q el usuario de uno de ellos escribio
-    io.emit('broadcast message', msg)
+    io.emit('broadcasted message', msg, result.lastInsertRowid.toString(), username)
   })
+
+  if (!socket.recovered) {
+    try {
+      const messages = await db.execute({
+        sql: 'SELECT id, content, user FROM messages WHERE id > ?',
+        args: [socket.handshake.auth.serverOffset ?? 0]
+      })
+
+      messages.rows.forEach(row => {
+        socket.emit('broadcasted message', row.content, row.id.toString(), row.user)
+      })
+    } catch (e) {
+
+    }
+  }
 })
 
 app.use(logger('dev')) // aparece el log en la terminal (monitorea las peticiones, errores, etc)
