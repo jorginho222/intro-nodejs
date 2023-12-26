@@ -33,8 +33,7 @@ export class Movie {
     return false
   }
 
-  static async create ({ validated }) {
-    console.log(validated)
+  static async create (validated) {
     const {
       title,
       year,
@@ -65,8 +64,13 @@ export class Movie {
 
   static async update ({ id, validatedAttrs }) {
     let setFields = ''
+    let isRateAttribute = false
     Object.entries(validatedAttrs.data).forEach(movieAttr => {
       const [key, value] = movieAttr
+      if (key === 'rate') {
+        isRateAttribute = true
+        return
+      }
       setFields += key + ' = ' + value + ', '
     })
     setFields = setFields.substring(0, setFields.length - 2) // remove comma at final
@@ -74,6 +78,10 @@ export class Movie {
     await (await connection).query(
       'UPDATE movies SET ' + setFields + ' WHERE movies.id = UUID_TO_BIN(?);', [id]
     )
+    if (isRateAttribute) {
+      await this.rate(id, validatedAttrs.data.rate)
+    }
+
     // recuperar movie
     const [movie] = await (await connection).query(
       'SELECT title, year, director, duration, poster, rate, BIN_TO_UUID(id) id FROM movies ' +
@@ -84,8 +92,27 @@ export class Movie {
   }
 
   static async delete (id) {
-    // TODO: delete a movie
+    const wasFound = await this.getById(id)
+    if (!wasFound) {
+      return false
+    }
+    await (await connection).query(
+      'DELETE FROM movies WHERE id = UUID_TO_BIN(?)',
+      [id]
+    )
+    return true
   }
 
-  // todo: GENRE CRUD
+  static async rate (id, currentRate) {
+    const [movie] = await (await connection).query(
+      'SELECT rate FROM movies WHERE id = UUID_TO_BIN(?)',
+      [id]
+    )
+    if (movie.length === 0) return false
+    const averageRate = (currentRate + parseFloat(movie[0].rate)) / 2
+    await (await connection).query(
+      'UPDATE movies SET rate = ? WHERE id = UUID_TO_BIN(?)',
+      [averageRate, id]
+    )
+  }
 }

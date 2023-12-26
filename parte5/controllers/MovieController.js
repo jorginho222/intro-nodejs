@@ -24,7 +24,7 @@ export class MovieController {
       // tambien podria mandarse err 422
       return res.status(400).json({ error: JSON.parse(validatedMovie.error.message) })
     }
-    const createdMovie = await this.movieModel.create({ input: validatedMovie.data })
+    const createdMovie = await this.movieModel.create(validatedMovie.data)
 
     res.status(201).json(createdMovie)
   }
