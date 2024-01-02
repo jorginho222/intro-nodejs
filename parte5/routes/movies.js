@@ -6,7 +6,7 @@ export const createMovieRouter = ({ movieModel }) => {
 
   const movieController = new MovieController({ movieModel })
 
-  moviesRouter.get('/', movieController.getAll)
+  moviesRouter.get('/', movieController.getMovies)
   moviesRouter.get('/:id', movieController.getById)
   moviesRouter.post('/', movieController.create)
   moviesRouter.delete('/:id', movieController.delete)

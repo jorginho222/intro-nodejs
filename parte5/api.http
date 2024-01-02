@@ -2,10 +2,13 @@
 GET http://localhost:1234/movies
 
 ### Recuperar pelicula por id
-GET http://localhost:1234/movies/6a360a18-c645-4b47-9a7b-2a71babbf3e0
+GET http://localhost:1234/movies/d4d6a33e-a99b-11ee-b85d-d85ed3a4f313
 
 ### Recuperar peliculas por un genero
-GET http://localhost:1234/movies?genre=romance
+GET http://localhost:1234/movies?genreName=romance
+
+### Recuperar pelis por directorId
+GET http://localhost:1234/movies?directorId=de1fdd98-a96a-11ee-b85d-d85ed3a4f313
 
 ### Crear una pelicula con POST
 POST http://localhost:1234/movies
@@ -14,22 +17,19 @@ Content-Type: application/json
 {
   "title": "La camerusa",
   "year": 1994,
-  "director": "Roger Waters, Bob Dylan",
   "duration": 666,
   "poster": "https://m.media-amazon.com/images/I/81BMmrwSFOL._AC_UF1000,1000_QL80_.jpg",
-  "genre": [
-    "Animation"
-  ]
+  "genreId": "4",
+  "directorId": "cc7f91bf-a981-11ee-b85d-d85ed3a4f313"
 }
 
 ### Borrar una peli
-DELETE http://localhost:1234/movies/e248d226-a190-11ee-94fa-2cf05d78338f
+DELETE http://localhost:1234/movies/9415afad-a996-11ee-b85d-d85ed3a4f313
 
 ### Actualizar la pelicula (una parte)
-PATCH http://localhost:1234/movies/5c93b190-9a0b-11ee-a318-2cf05d78338f
+PATCH http://localhost:1234/movies/d4d6a33e-a99b-11ee-b85d-d85ed3a4f313
 Content-Type: application/json
 
 {
-  "year": 2011,
-  "rate": 5
+  "rate": 9
 }

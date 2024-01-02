@@ -5,10 +5,19 @@ export class MovieController {
     this.movieModel = movieModel
   }
 
-  getAll = async (req, res) => {
-    const { genre } = req.query
-    const movies = await this.movieModel.getAll(genre)
-    res.json(movies)
+  getMovies = async (req, res) => {
+    const { genreName } = req.query
+    const { directorId } = req.query
+    let movies = []
+    if (genreName) {
+      movies = await this.movieModel.getByGenre(genreName)
+    } else if (directorId) {
+      movies = await this.movieModel.getByDirector(directorId)
+    } else {
+      movies = await this.movieModel.getAll()
+    }
+    if (movies) return res.json(movies)
+    res.status(404).json({ message: 'Movie/s not found' })
   }
 
   getById = async (req, res) => {
@@ -24,7 +33,7 @@ export class MovieController {
       // tambien podria mandarse err 422
       return res.status(400).json({ error: JSON.parse(validatedMovie.error.message) })
     }
-    const createdMovie = await this.movieModel.create(validatedMovie.data)
+    const createdMovie = await this.movieModel.create(validatedMovie.data, req.body.genreId, req.body.directorId)
 
     res.status(201).json(createdMovie)
   }
@@ -43,9 +52,11 @@ export class MovieController {
     if (!validatedAttrs.success) {
       return res.status(400).json({ error: JSON.parse(validatedAttrs.error.message) })
     }
-
     const { id } = req.params
-    const updatedMovie = await this.movieModel.update({ id, validatedAttrs })
+    const updatedMovie = validatedAttrs.data.rate
+      ? await this.movieModel.rate(id, validatedAttrs.data.rate)
+      : await this.movieModel.update({ id, validatedAttrs })
+
     if (!updatedMovie) {
       return res.status(404).json({ message: 'Movie Not Found' })
     }
