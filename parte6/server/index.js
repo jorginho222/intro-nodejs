@@ -32,7 +32,7 @@ io.on('connection', async (socket) => {
     console.log('An user has disconnected')
   })
 
-  socket.on('user message sent', async (msg) => {
+  socket.on('userMessageSent', async (msg) => {
     let result
     const username = socket.handshake.auth.username ?? 'anonymous'
     try {
@@ -46,7 +46,7 @@ io.on('connection', async (socket) => {
     }
 
     // mandamos a todos los clientes el msg q el usuario de uno de ellos escribio
-    io.emit('broadcasted message', msg, result.lastInsertRowid.toString(), username)
+    io.emit('broadcastedMessage', msg, result.lastInsertRowid.toString(), username)
   })
 
   if (!socket.recovered) {
@@ -57,7 +57,7 @@ io.on('connection', async (socket) => {
       })
 
       messages.rows.forEach(row => {
-        socket.emit('broadcasted message', row.content, row.id.toString(), row.user)
+        socket.emit('broadcastedMessage', row.content, row.id.toString(), row.user)
       })
     } catch (e) {
 
